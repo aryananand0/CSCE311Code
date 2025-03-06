@@ -1,10 +1,5 @@
 # Boolean Expression Evaluation over UNIX Domain Sockets
 
-**Course:** CSCE 311 - Operating Systems  
-**Semester:** Spring 2025  
-**Project:** Boolean Expression Evaluation over UNIX Domain Sockets
-
----
 
 ## Purpose
 
@@ -15,6 +10,7 @@ This project implements a client-server system that uses UNIX domain sockets for
 ## File Structure
 
 The project directory (proj2/) contains only the following files:
+
 proj2/
 ├── include/
 │   ├── bool_expr_client.h
