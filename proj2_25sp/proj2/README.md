@@ -5,7 +5,7 @@
 
 This project implements a client-server system that uses UNIX domain sockets for interprocess communication (IPC). The **server** reads a file containing boolean expressions, builds a truth-value mapping for variables `a` through `z`, and evaluates each expression. The **client** connects to the server, receives two special characters (the unit separator and the end-of-transmission marker), sends truth value assignments (T/F) for the variables, and then receives a summary of the evaluation results.
 
----
+
 
 ## File Structure
 
