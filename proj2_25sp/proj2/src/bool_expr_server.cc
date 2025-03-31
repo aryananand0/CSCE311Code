@@ -11,7 +11,6 @@
 
 
 
-// Global variable for signal handling.
 static volatile std::sig_atomic_t stopFlag = 0;
 static std::string globalSocketName;
 
