@@ -57,16 +57,16 @@ bool BankersResourceManager::Request(std::size_t id, const std::vector<std::size
     if(check){
         bool ans = SafeOrNot(updatedAvailable,NewNeeds,safeSequence,updatedAllocation);
         if(ans){
-            PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAllocation,updatedAvailable,ans);
+            PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAvailable,ans);
             allocation_ = updatedAllocation;  
             available_ = updatedAvailable;
         }
         else{
-            PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAllocation,updatedAvailable,ans);
+            PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAvailable,ans);
         }
         return ans;
     }
-    PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAllocation,updatedAvailable,check);
+    PrintLog(id,request,needs,safeSequence,NewNeeds,updatedAvailable,check);
     return false;
     
 }
@@ -78,33 +78,33 @@ void BankersResourceManager::Release(std::size_t id){
         allocation_.at(id)[i] = 0;
     }
 }
-bool BankersResourceManager::SafeOrNot( std::vector<std::size_t> updatedAvailable, 
-         std::vector<std::vector<std::size_t>> need,
-        std::vector<std::size_t>& safeSequence,
-        std::vector<std::vector<std::size_t>> updatedAllocation){
-            
-            std::vector<bool> finished(need.size(),false);
-            bool check = true;
-            while (check)
-            {
-                check = false;
-                for(std::size_t i=0;i<need.size();i++){
-                    if(!finished[i] && DoesItFit(need[i],updatedAvailable)){
-                        AddBckAlloc(updatedAvailable,updatedAllocation[i]);
-                        finished[i] = true;
-                        safeSequence.push_back(i);
-                        check = true;
-                    }
-
-                }
-            
-            }
-            for(std::size_t i=0;i<finished.size();i++){
-                if(!finished[i]){
-                    return false;
-                }
-            }
-            return true;
+bool BankersResourceManager::SafeOrNot(std::vector<std::size_t> updatedAvailable, 
+                                       std::vector<std::vector<std::size_t>> need,
+                                       std::vector<std::size_t>& safeSequence,
+                                       std::vector<std::vector<std::size_t>> updatedAllocation){
+    std::vector<std::size_t> pendingProcesses;
+    for (std::size_t i = 0; i < need.size(); i++) {
+        pendingProcesses.push_back(i);
+    }
+    bool madeProgress = true;
+    while (!pendingProcesses.empty() && madeProgress) {
+    madeProgress = false;
+    for (auto it = pendingProcesses.begin(); it != pendingProcesses.end(); ) {
+        std::size_t id = *it;
+        if (DoesItFit(need[id], updatedAvailable)) {
+            releaseResources(updatedAvailable, updatedAllocation[id]);
+            safeSequence.push_back(id);
+            it = pendingProcesses.erase(it);
+            madeProgress = true;
+        } 
+        else {
+            ++it;
+        }
+    }
+ }
+    
+    return pendingProcesses.empty();
+           
 }
 
 
@@ -114,7 +114,6 @@ void BankersResourceManager::PrintLog(
         const std::vector<std::vector<std::size_t>>& needs,
         const std::vector<std::size_t>& safeSequence,
         const std::vector<std::vector<std::size_t>>& NewNeeds,
-        const std::vector<std::vector<std::size_t>>& updatedAllocation,
         const std::vector<std::size_t>& updatedAvailable,
         bool ans){
             if(ans){
@@ -179,7 +178,7 @@ bool BankersResourceManager::DoesItFit(std::vector<std::size_t> need, std::vecto
     return ans;
 }
 
-void BankersResourceManager::AddBckAlloc(std::vector<std::size_t>& available, std::vector<std::size_t>& alloca){
+void BankersResourceManager::releaseResources(std::vector<std::size_t>& available, std::vector<std::size_t>& alloca){
     for(std::size_t i=0;i<available.size();i++){
         available[i]+=alloca[i];
     }

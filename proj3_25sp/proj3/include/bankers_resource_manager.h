@@ -23,14 +23,13 @@ class BankersResourceManager{
                 std::vector<std::size_t>& safeSequence,
                 std::vector<std::vector<std::size_t>> newAllocation);
     bool DoesItFit(std::vector<std::size_t> need, std::vector<std::size_t> available);
-    void AddBckAlloc(std::vector<std::size_t>& available, std::vector<std::size_t>& alloca);
+    void releaseResources(std::vector<std::size_t>& available, std::vector<std::size_t>& alloca);
     void PrintLog(
         std::size_t id,
         const std::vector<std::size_t>& request,
         const std::vector<std::vector<std::size_t>>& needs,
         const std::vector<std::size_t>& safeSequence,
         const std::vector<std::vector<std::size_t>>& NewNeeds,
-        const std::vector<std::vector<std::size_t>>& updatedAllocation,
         const std::vector<std::size_t>& updatedAvailable,bool ans);  
 
 };
